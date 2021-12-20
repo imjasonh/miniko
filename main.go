@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
 	"github.com/google/ko/pkg/build"
-	"github.com/google/ko/pkg/publish"
+	kremote "github.com/google/ko/pkg/publish/remote"
 )
 
 const (
@@ -42,11 +42,11 @@ func main() {
 		log.Fatalf("Build: %v", err)
 	}
 
-	p, err := publish.NewDefault(targetRepo,
-		publish.WithTags([]string{commitSHA}),
-		publish.WithAuthFromKeychain(authn.DefaultKeychain))
+	p, err := kremote.New(targetRepo,
+		kremote.WithTags([]string{commitSHA}),
+		kremote.WithAuthFromKeychain(authn.DefaultKeychain))
 	if err != nil {
-		log.Fatalf("NewDefault: %v", err)
+		log.Fatalf("remote.New: %v", err)
 	}
 	ref, err := p.Publish(ctx, r, importpath)
 	if err != nil {
